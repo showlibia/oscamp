@@ -62,10 +62,24 @@ pub mod paging;
 pub mod console {
     pub use super::platform::console::*;
 
+    // Define ANSI color codes as constants for easy maintenance
+    const RESET_CODE: &[u8] = b"\x1b[0m";
+    const COLOR_CODE: &[u8] = b"\x1b[34m";
+
     /// Write a slice of bytes to the console.
     pub fn write_bytes(bytes: &[u8]) {
-        for c in bytes {
-            putchar(*c);
+        for &c in COLOR_CODE {
+            putchar(c);
+        }
+
+        // Write each byte in the given slice
+        for &c in bytes {
+            putchar(c);
+        }
+
+        // Reset the color
+        for &c in RESET_CODE {
+            putchar(c);
         }
     }
 }
